@@ -6,7 +6,7 @@ import { assertNever } from "@/lib/assert-never";
 import { passportReducer, type PassportState } from "../model/passport-reducer";
 import type { StageAction } from "../model/stage-flow";
 import { DEFAULT_TAB_ID, PASSPORT_TABS, isTabId, type TabId } from "../model/tabs";
-import type { StageId } from "../model/types";
+import type { StageDraft, StageId } from "../model/types";
 import { EstimateTab } from "./estimate-tab";
 import { StagesTab } from "./stages-tab";
 
@@ -19,6 +19,10 @@ export function PassportWorkspace({ initial, mainTab }: PassportWorkspaceProps) 
   const [activeTab, setActiveTab] = useState<TabId>(DEFAULT_TAB_ID);
   const [state, dispatch] = useReducer(passportReducer, initial);
 
+  const addStage = (draft: StageDraft): void => {
+    dispatch({ type: "stage/added", id: `stage_${crypto.randomUUID()}`, draft });
+  };
+
   const transitionStage = (id: StageId, action: StageAction): void => {
     dispatch({ type: "stage/transitioned", id, action });
   };
@@ -28,7 +32,11 @@ export function PassportWorkspace({ initial, mainTab }: PassportWorkspaceProps) 
       case "main":
         return mainTab;
       case "stages":
-        return <StagesTab stages={state.stages} onTransition={transitionStage} />;
+        return <StagesTab
+            stages={state.stages}
+            onAdd={addStage}
+            onTransition={transitionStage}
+          />;
       case "estimate":
         return <EstimateTab items={state.estimate} />;
       default:
@@ -44,7 +52,7 @@ export function PassportWorkspace({ initial, mainTab }: PassportWorkspaceProps) 
       }}
       className="mt-6 gap-6"
     >
-      <TabsList className="w-full justify-start overflow-x-auto">
+      <TabsList className="w-full justify-start overflow-x-auto overflow-y-hidden">
         {PASSPORT_TABS.map((tab) => (
           <TabsTrigger key={tab.id} value={tab.id} className="shrink-0">
             <span className="hidden sm:inline">{tab.label}</span>

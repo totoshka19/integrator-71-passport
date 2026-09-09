@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { buildStageViews, type StageAction } from "../model/stage-flow";
-import type { Stage, StageId } from "../model/types";
+import type { Stage, StageDraft, StageId } from "../model/types";
+import { AddStageDialog } from "./add-stage-dialog";
 import { EmptyState } from "./empty-state";
 import { StageCard } from "./stage-card";
 
 interface StagesTabProps {
   readonly stages: readonly Stage[];
+  readonly onAdd: (draft: StageDraft) => void;
   readonly onTransition: (id: StageId, action: StageAction) => void;
 }
 
-export function StagesTab({ stages, onTransition }: StagesTabProps) {
+export function StagesTab({ stages, onAdd, onTransition }: StagesTabProps) {
   const [deniedStageId, setDeniedStageId] = useState<StageId | null>(null);
   const views = buildStageViews(stages);
 
@@ -23,26 +25,36 @@ export function StagesTab({ stages, onTransition }: StagesTabProps) {
     onTransition(id, action);
   };
 
-  if (views.length === 0) {
-    return (
-      <EmptyState
-        title="Этапов пока нет"
-        description="Добавьте первый этап работ, чтобы отслеживать ход строительства."
-      />
-    );
-  }
-
   return (
-    <ol className="grid gap-3">
-      {views.map((view) => (
-        <li key={view.stage.id}>
-          <StageCard
-            view={view}
-            showDenial={deniedStageId === view.stage.id}
-            onTransition={handleTransition}
-          />
-        </li>
-      ))}
-    </ol>
+    <div className="grid gap-4">
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-base font-medium">
+          Этапы работ
+          <span className="ml-2 text-muted-foreground tabular-nums">
+            {views.length}
+          </span>
+        </h2>
+        <AddStageDialog onCreate={onAdd} />
+      </div>
+
+      {views.length === 0 ? (
+        <EmptyState
+          title="Этапов пока нет"
+          description="Добавьте первый этап работ, чтобы отслеживать ход строительства."
+        />
+      ) : (
+        <ol className="grid gap-3">
+          {views.map((view) => (
+            <li key={view.stage.id}>
+              <StageCard
+                view={view}
+                showDenial={deniedStageId === view.stage.id}
+                onTransition={handleTransition}
+              />
+            </li>
+          ))}
+        </ol>
+      )}
+    </div>
   );
 }
