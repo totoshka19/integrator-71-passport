@@ -6,6 +6,7 @@ import {
 } from "@/features/passport/data/mock-passports";
 import { MainTab } from "@/features/passport/ui/main-tab";
 import { ObjectHeader } from "@/features/passport/ui/object-header";
+import { PassportWorkspace } from "@/features/passport/ui/passport-workspace";
 
 export function generateStaticParams() {
   return listObjectIds().map((objectId) => ({ objectId }));
@@ -29,9 +30,10 @@ export default async function ObjectPassportPage({
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 lg:py-10">
       <ObjectHeader passport={passport} />
-      <div className="mt-6">
-        <MainTab passport={passport} />
-      </div>
+      <PassportWorkspace
+        initial={{ stages: passport.stages, estimate: passport.estimate }}
+        mainTab={<MainTab passport={passport} />}
+      />
     </main>
   );
 }
