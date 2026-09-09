@@ -34,16 +34,16 @@ export function validateStageForm(
   const title = values.title.trim();
 
   if (title.length < TITLE_MIN_LENGTH) {
-    errors.title = `Название — минимум ${TITLE_MIN_LENGTH} символа`;
+    errors.title = `Минимум ${TITLE_MIN_LENGTH} символа`;
   } else if (title.length > TITLE_MAX_LENGTH) {
-    errors.title = `Название — не длиннее ${TITLE_MAX_LENGTH} символов`;
+    errors.title = `Не длиннее ${TITLE_MAX_LENGTH} символов`;
   }
 
   if (toIsoDate(values.startDate) === null) {
-    errors.startDate = "Укажите дату начала";
+    errors.startDate = "Укажите дату";
   }
   if (toIsoDate(values.endDate) === null) {
-    errors.endDate = "Укажите дату окончания";
+    errors.endDate = "Укажите дату";
   }
 
   const period = toDateRange(values.startDate, values.endDate);
@@ -79,13 +79,13 @@ export function validateEstimateForm(
   const unitPrice = toPositive(toDecimal(values.unitPrice));
 
   if (title.length < TITLE_MIN_LENGTH) {
-    errors.title = `Наименование — минимум ${TITLE_MIN_LENGTH} символа`;
+    errors.title = `Минимум ${TITLE_MIN_LENGTH} символа`;
   } else if (title.length > TITLE_MAX_LENGTH) {
-    errors.title = `Наименование — не длиннее ${TITLE_MAX_LENGTH} символов`;
+    errors.title = `Не длиннее ${TITLE_MAX_LENGTH} символов`;
   }
   if (unit === null) errors.unit = "Выберите единицу измерения";
-  if (quantity === null) errors.quantity = "Количество — число больше нуля";
-  if (unitPrice === null) errors.unitPrice = "Цена — число больше нуля";
+  if (quantity === null) errors.quantity = "Число больше нуля";
+  if (unitPrice === null) errors.unitPrice = "Число больше нуля";
 
   if (
     unit === null ||

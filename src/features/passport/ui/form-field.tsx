@@ -7,7 +7,6 @@ interface FormFieldProps {
   readonly value: string;
   readonly error: string | undefined;
   readonly onChange: (value: string) => void;
-  readonly type?: "text" | "date" | "number";
   readonly placeholder?: string;
   readonly inputMode?: "decimal";
 }
@@ -18,17 +17,15 @@ export function FormField({
   value,
   error,
   onChange,
-  type = "text",
   ...input
 }: FormFieldProps) {
   const errorId = `${id}-error`;
 
   return (
-    <div className="grid gap-2">
+    <div className="flex flex-col gap-2">
       <Label htmlFor={id}>{label}</Label>
       <Input
         id={id}
-        type={type}
         value={value}
         aria-invalid={error !== undefined}
         aria-describedby={error === undefined ? undefined : errorId}

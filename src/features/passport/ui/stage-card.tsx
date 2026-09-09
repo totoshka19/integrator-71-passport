@@ -31,7 +31,7 @@ export function StageCard({ view, showDenial, onTransition }: StageCardProps) {
           <div className="min-w-0">
             <p className="font-medium break-words">{stage.title}</p>
             <p className="mt-1 text-sm tabular-nums text-muted-foreground">
-              {formatDate(stage.period.start)} — {formatDate(stage.period.end)}
+              {formatDate(stage.period.start)} - {formatDate(stage.period.end)}
             </p>
             {showDenial && !check.ok && (
               <p role="status" className="mt-2 text-sm text-amber-700">

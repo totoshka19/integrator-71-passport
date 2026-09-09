@@ -6,7 +6,7 @@ import { assertNever } from "@/lib/assert-never";
 import { passportReducer, type PassportState } from "../model/passport-reducer";
 import type { StageAction } from "../model/stage-flow";
 import { DEFAULT_TAB_ID, PASSPORT_TABS, isTabId, type TabId } from "../model/tabs";
-import type { StageDraft, StageId } from "../model/types";
+import type { EstimateItemDraft, StageDraft, StageId } from "../model/types";
 import { EstimateTab } from "./estimate-tab";
 import { StagesTab } from "./stages-tab";
 
@@ -21,6 +21,10 @@ export function PassportWorkspace({ initial, mainTab }: PassportWorkspaceProps) 
 
   const addStage = (draft: StageDraft): void => {
     dispatch({ type: "stage/added", id: `stage_${crypto.randomUUID()}`, draft });
+  };
+
+  const addEstimateItem = (draft: EstimateItemDraft): void => {
+    dispatch({ type: "estimate/added", id: `item_${crypto.randomUUID()}`, draft });
   };
 
   const transitionStage = (id: StageId, action: StageAction): void => {
@@ -38,7 +42,7 @@ export function PassportWorkspace({ initial, mainTab }: PassportWorkspaceProps) 
             onTransition={transitionStage}
           />;
       case "estimate":
-        return <EstimateTab items={state.estimate} />;
+        return <EstimateTab items={state.estimate} onAdd={addEstimateItem} />;
       default:
         return assertNever(tab);
     }

@@ -11,7 +11,7 @@ const geist = Geist({
 export const metadata: Metadata = {
   title: {
     default: "Паспорт объекта",
-    template: "%s — Паспорт объекта",
+    template: "%s - Паспорт объекта",
   },
   description:
     "Паспорт объекта платформы «Интегратор 7/1»: основные данные, этапы работ и смета.",

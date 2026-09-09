@@ -16,6 +16,7 @@ import {
   type StageFormValues,
 } from "../model/forms";
 import type { StageDraft } from "../model/types";
+import { DateField } from "./date-field";
 import { FormField } from "./form-field";
 
 interface AddStageDialogProps {
@@ -25,11 +26,15 @@ interface AddStageDialogProps {
 export function AddStageDialog({ onCreate }: AddStageDialogProps) {
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState<StageFormValues>(EMPTY_STAGE_FORM);
-  const [errors, setErrors] = useState<FieldErrors<StageFormValues>>({});
+  const [submitted, setSubmitted] = useState(false);
+
+  const result = validateStageForm(values);
+  const errors: FieldErrors<StageFormValues> =
+    submitted && !result.ok ? result.errors : {};
 
   const reset = (): void => {
     setValues(EMPTY_STAGE_FORM);
-    setErrors({});
+    setSubmitted(false);
   };
 
   const handleOpenChange = (next: boolean): void => {
@@ -39,11 +44,8 @@ export function AddStageDialog({ onCreate }: AddStageDialogProps) {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    const result = validateStageForm(values);
-    if (!result.ok) {
-      setErrors(result.errors);
-      return;
-    }
+    setSubmitted(true);
+    if (!result.ok) return;
     onCreate(result.value);
     setOpen(false);
     reset();
@@ -72,20 +74,18 @@ export function AddStageDialog({ onCreate }: AddStageDialogProps) {
             onChange={(title) => setValues((current) => ({ ...current, title }))}
           />
           <div className="grid gap-4 sm:grid-cols-2">
-            <FormField
+            <DateField
               id="stage-start"
               label="Дата начала"
-              type="date"
               value={values.startDate}
               error={errors.startDate}
               onChange={(startDate) =>
                 setValues((current) => ({ ...current, startDate }))
               }
             />
-            <FormField
+            <DateField
               id="stage-end"
               label="Дата окончания"
-              type="date"
               value={values.endDate}
               error={errors.endDate}
               onChange={(endDate) =>

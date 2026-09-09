@@ -58,7 +58,7 @@ export function toDateRange(start: string, end: string): DateRange | null {
 export function dateRange(start: string, end: string): DateRange {
   const result = toDateRange(start, end);
   if (result === null) {
-    throw new Error(`Некорректный период: ${start} — ${end}`);
+    throw new Error(`Некорректный период: ${start} - ${end}`);
   }
   return result;
 }

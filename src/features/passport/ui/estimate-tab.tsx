@@ -1,21 +1,33 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { formatRub } from "@/lib/format";
 import { PLATFORM_FEE_RATE, estimateTotal, platformFee } from "../model/estimate";
-import type { EstimateItem } from "../model/types";
+import type { EstimateItem, EstimateItemDraft } from "../model/types";
+import { AddEstimateItemDialog } from "./add-estimate-item-dialog";
 import { EmptyState } from "./empty-state";
 import { EstimateTable } from "./estimate-table";
 
 interface EstimateTabProps {
   readonly items: readonly EstimateItem[];
+  readonly onAdd: (draft: EstimateItemDraft) => void;
 }
 
-export function EstimateTab({ items }: EstimateTabProps) {
+export function EstimateTab({ items, onAdd }: EstimateTabProps) {
   const total = estimateTotal(items);
   const fee = platformFee(total);
   const feePercent = Math.round(PLATFORM_FEE_RATE * 100);
 
   return (
     <div className="grid gap-4">
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-base font-medium">
+          Смета
+          <span className="ml-2 text-muted-foreground tabular-nums">
+            {items.length}
+          </span>
+        </h2>
+        <AddEstimateItemDialog onCreate={onAdd} />
+      </div>
+
       {items.length === 0 ? (
         <EmptyState
           title="В смете пока нет позиций"

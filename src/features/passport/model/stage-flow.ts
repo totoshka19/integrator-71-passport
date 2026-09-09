@@ -61,7 +61,7 @@ export function describeDenial(denial: TransitionDenial): string {
     case "previous_not_done":
       return `Сначала завершите этап «${denial.blocker.title}»`;
     case "next_already_started":
-      return `Этап «${denial.blocker.title}» уже начат — вернуть предыдущий нельзя`;
+      return `Этап «${denial.blocker.title}» уже начат - вернуть предыдущий нельзя`;
     default:
       return assertNever(denial);
   }
