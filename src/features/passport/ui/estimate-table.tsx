@@ -19,12 +19,13 @@ export function EstimateTable({ items }: EstimateTableProps) {
   return (
     <>
       <div className="hidden md:block">
-        <Table>
+        <Table aria-label="Позиции сметы">
           <TableHeader>
             <TableRow>
               {ESTIMATE_COLUMNS.map((column) => (
                 <TableHead
                   key={column.key}
+                  scope="col"
                   className={cn(column.align === "right" && "text-right")}
                 >
                   {column.label}

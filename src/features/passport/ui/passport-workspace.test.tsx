@@ -297,6 +297,52 @@ describe("пустые состояния", () => {
   });
 });
 
+describe("доступность", () => {
+  it("даёт таблице сметы название", async () => {
+    const user = userEvent.setup();
+    renderWorkspace();
+    await openTab(user, /Смета/);
+
+    expect(
+      screen.getByRole("table", { name: "Позиции сметы" }),
+    ).toBeInTheDocument();
+  });
+
+  it("помечает заголовки столбцов области действия", async () => {
+    const user = userEvent.setup();
+    renderWorkspace();
+    await openTab(user, /Смета/);
+
+    const headers = within(screen.getByRole("table")).getAllByRole(
+      "columnheader",
+    );
+    expect(headers.length).toBeGreaterThan(0);
+    for (const header of headers) {
+      expect(header).toHaveAttribute("scope", "col");
+    }
+  });
+
+  it("не смешивает счётчик позиций с заголовком раздела", async () => {
+    const user = userEvent.setup();
+    renderWorkspace();
+    await openTab(user, /Смета/);
+
+    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+      /^Смета$/,
+    );
+  });
+
+  it("не смешивает счётчик этапов с заголовком раздела", async () => {
+    const user = userEvent.setup();
+    renderWorkspace();
+    await openTab(user, /Этапы/);
+
+    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+      /^Этапы работ$/,
+    );
+  });
+});
+
 describe("правила и состояние", () => {
   it("не меняет статус при запрещённом переходе", async () => {
     const user = userEvent.setup();

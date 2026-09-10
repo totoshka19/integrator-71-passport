@@ -28,12 +28,12 @@ export function StagesTab({ stages, onAdd, onTransition }: StagesTabProps) {
   return (
     <div className="grid gap-4">
       <div className="flex items-center justify-between gap-4">
-        <h2 className="text-base font-medium">
-          Этапы работ
-          <span className="ml-2 text-muted-foreground tabular-nums">
+        <div className="flex items-baseline gap-2">
+          <h2 className="text-base font-medium">Этапы работ</h2>
+          <span className="text-muted-foreground tabular-nums">
             {views.length}
           </span>
-        </h2>
+        </div>
         <AddStageDialog onCreate={onAdd} />
       </div>
 

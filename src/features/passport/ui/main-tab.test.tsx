@@ -31,6 +31,14 @@ describe("MainTab", () => {
     }
   });
 
+  it("даёт разделу заголовок второго уровня", () => {
+    render(<MainTab passport={passport} />);
+
+    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+      "Основные данные",
+    );
+  });
+
   it("показывает подпись типа объекта, а не ключ словаря", () => {
     render(<MainTab passport={passport} />);
 

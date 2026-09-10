@@ -21,6 +21,7 @@ export function MainTab({ passport }: MainTabProps) {
   return (
     <Card>
       <CardContent>
+        <h2 className="sr-only">Основные данные</h2>
         <dl className="grid gap-5 sm:grid-cols-2">
           {fields.map((field) => (
             <div key={field.label} className="min-w-0">
