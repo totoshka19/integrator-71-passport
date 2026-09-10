@@ -3,7 +3,7 @@
 Тестовое задание для платформы «Интегратор 7/1». Страница строительного объекта
 с тремя вкладками: основные данные, этапы работ и смета.
 
-**Демо:** _ссылка появится после деплоя_
+**Демо:** https://integrator-71-passport-totoshka19-fn63.onreza.app
 
 ---
 
@@ -55,10 +55,10 @@ npm run dev
 
 Два демонстрационных объекта:
 
-| Маршрут | Зачем |
+| Объект | Зачем |
 |---|---|
-| `/objects/obj_kottedzh-zaozerye` | заполненный: 13 этапов, 8 позиций сметы |
-| `/objects/obj_kvartira-mytishchi` | пустой черновик: показывает пустые состояния |
+| [Коттедж «Заозёрье»](https://integrator-71-passport-totoshka19-fn63.onreza.app/objects/obj_kottedzh-zaozerye) | заполненный: 13 этапов, 8 позиций сметы |
+| [Квартира в Мытищах](https://integrator-71-passport-totoshka19-fn63.onreza.app/objects/obj_kvartira-mytishchi) | пустой черновик: показывает пустые состояния |
 
 Оба пререндерятся статически через `generateStaticParams`. Корень `/` делает
 редирект на первый.
