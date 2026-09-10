@@ -12,6 +12,7 @@ import {
 import { formatDate } from "@/lib/format";
 import { toIsoDate } from "@/lib/scalars";
 import { cn } from "@/lib/utils";
+import { CalendarDropdown } from "./calendar-dropdown";
 
 const FIRST_MONTH = new Date(2020, 0);
 const LAST_MONTH = new Date(2035, 11);
@@ -72,6 +73,7 @@ export function DateField({ id, label, value, error, onChange }: DateFieldProps)
             mode="single"
             locale={ru}
             captionLayout="dropdown"
+            components={{ Dropdown: CalendarDropdown }}
             formatters={{
               formatMonthDropdown: (date) =>
                 date.toLocaleString("ru", { month: "long" }),
