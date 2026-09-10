@@ -297,6 +297,32 @@ describe("пустые состояния", () => {
   });
 });
 
+describe("календарь", () => {
+  it("меняет месяц выбором из списка", async () => {
+    const user = userEvent.setup();
+    renderWorkspace();
+    const dialog = await openStageDialog(user);
+
+    await user.click(within(dialog).getByLabelText("Дата начала"));
+    const trigger = await screen.findByRole("combobox", { name: "Месяц" });
+    const before = {
+      month: trigger.textContent,
+      grid: screen.getByRole("grid").textContent,
+    };
+
+    await user.click(trigger);
+    const other = (await screen.findAllByRole("option")).find(
+      (option) => option.textContent !== before.month,
+    );
+    await user.click(other as HTMLElement);
+
+    expect(
+      screen.getByRole("combobox", { name: "Месяц" }),
+    ).not.toHaveTextContent(String(before.month));
+    expect(screen.getByRole("grid").textContent).not.toBe(before.grid);
+  });
+});
+
 describe("доступность", () => {
   it("даёт таблице сметы название", async () => {
     const user = userEvent.setup();
