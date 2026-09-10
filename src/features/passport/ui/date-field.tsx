@@ -82,6 +82,7 @@ export function DateField({ id, label, value, error, onChange }: DateFieldProps)
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
+            className="w-64!"
             mode="single"
             locale={ru}
             captionLayout="dropdown"
