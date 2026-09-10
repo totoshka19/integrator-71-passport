@@ -14,8 +14,17 @@ import { toIsoDate } from "@/lib/scalars";
 import { cn } from "@/lib/utils";
 import { CalendarDropdown } from "./calendar-dropdown";
 
-const FIRST_MONTH = new Date(2020, 0);
-const LAST_MONTH = new Date(2035, 11);
+const YEARS_AROUND = 10;
+
+export function navigationRange(currentYear: number): {
+  readonly start: Date;
+  readonly end: Date;
+} {
+  return {
+    start: new Date(currentYear - YEARS_AROUND, 0),
+    end: new Date(currentYear + YEARS_AROUND, 11),
+  };
+}
 
 function toLocalDate(value: string): Date | undefined {
   const iso = toIsoDate(value);
@@ -44,6 +53,9 @@ interface DateFieldProps {
 
 export function DateField({ id, label, value, error, onChange }: DateFieldProps) {
   const [open, setOpen] = useState(false);
+  const { start: firstMonth, end: lastMonth } = navigationRange(
+    new Date().getFullYear(),
+  );
   const iso = toIsoDate(value);
   const selected = toLocalDate(value);
   const errorId = `${id}-error`;
@@ -84,8 +96,8 @@ export function DateField({ id, label, value, error, onChange }: DateFieldProps)
               labelNext: () => "Следующий месяц",
               labelPrevious: () => "Предыдущий месяц",
             }}
-            startMonth={FIRST_MONTH}
-            endMonth={LAST_MONTH}
+            startMonth={firstMonth}
+            endMonth={lastMonth}
             selected={selected}
             {...(selected === undefined ? {} : { defaultMonth: selected })}
             onSelect={(date) => {
