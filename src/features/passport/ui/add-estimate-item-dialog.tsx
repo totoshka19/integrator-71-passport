@@ -95,10 +95,17 @@ export function AddEstimateItemDialog({ onCreate }: AddEstimateItemDialogProps) 
                 value={values.unit}
                 onValueChange={(unit) => update({ unit })}
               >
-                <SelectTrigger id="item-unit" className="w-full">
+                <SelectTrigger
+                  id="item-unit"
+                  className="w-full [&>svg]:transition-transform [&>svg]:duration-200 data-[state=open]:[&>svg]:rotate-180"
+                >
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent
+                  position="popper"
+                  align="start"
+                  className="w-[var(--radix-select-trigger-width)] min-w-0"
+                >
                   {UNIT_OPTIONS.map((option) => (
                     <SelectItem key={option.id} value={option.id}>
                       {option.label}
