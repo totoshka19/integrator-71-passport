@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   MEASUREMENT_UNITS,
+  OBJECT_STATUSES,
+  STAGE_STATUSES,
   isMeasurementUnit,
   measurementUnitOptions,
 } from "./dictionaries";
@@ -35,5 +37,17 @@ describe("measurementUnitOptions", () => {
   it("подставляет подпись из словаря", () => {
     const option = measurementUnitOptions().find((it) => it.id === "sqm");
     expect(option?.label).toBe(MEASUREMENT_UNITS.sqm.label);
+  });
+});
+
+describe("тона статусов", () => {
+  it("даёт каждому статусу этапа собственный тон", () => {
+    const tones = Object.values(STAGE_STATUSES).map((entry) => entry.tone);
+    expect(new Set(tones).size).toBe(tones.length);
+  });
+
+  it("даёт каждому статусу объекта собственный тон", () => {
+    const tones = Object.values(OBJECT_STATUSES).map((entry) => entry.tone);
+    expect(new Set(tones).size).toBe(tones.length);
   });
 });

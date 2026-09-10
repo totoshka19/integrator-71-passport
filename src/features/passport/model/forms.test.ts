@@ -119,6 +119,11 @@ describe("validateEstimateForm", () => {
     expect(!result.ok && result.errors.quantity).toBeDefined();
   });
 
+  it("ограничивает длину наименования", () => {
+    const result = validateEstimateForm(estimateForm({ title: "к".repeat(121) }));
+    expect(!result.ok && result.errors.title).toBeDefined();
+  });
+
   it("отвергает единицу измерения не из словаря", () => {
     const result = validateEstimateForm(estimateForm({ unit: "парсек" }));
     expect(!result.ok && result.errors.unit).toBeDefined();

@@ -277,6 +277,26 @@ describe("добавление позиции сметы", () => {
   });
 });
 
+describe("пустые состояния", () => {
+  it("показывает заглушку, когда этапов нет", async () => {
+    const user = userEvent.setup();
+    renderWorkspace({ stages: [], estimate: [] });
+    await openTab(user, /Этапы/);
+
+    expect(screen.getByText("Этапов пока нет")).toBeInTheDocument();
+  });
+
+  it("оставляет кнопку добавления доступной на пустом списке", async () => {
+    const user = userEvent.setup();
+    renderWorkspace({ stages: [], estimate: [] });
+    await openTab(user, /Этапы/);
+
+    expect(
+      screen.getByRole("button", { name: "Добавить этап" }),
+    ).toBeInTheDocument();
+  });
+});
+
 describe("правила и состояние", () => {
   it("не меняет статус при запрещённом переходе", async () => {
     const user = userEvent.setup();
