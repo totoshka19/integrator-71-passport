@@ -34,7 +34,10 @@ export function StageCard({ view, showDenial, onTransition }: StageCardProps) {
               {formatDate(stage.period.start)} - {formatDate(stage.period.end)}
             </p>
             {showDenial && !check.ok && (
-              <p role="status" className="mt-2 text-sm text-amber-700">
+              <p
+                role="status"
+                className="mt-2 text-sm text-amber-700 dark:text-amber-400"
+              >
                 {describeDenial(check.denial)}
               </p>
             )}

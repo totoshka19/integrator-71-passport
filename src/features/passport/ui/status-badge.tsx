@@ -9,9 +9,20 @@ const TONE_STYLES: Record<
   { readonly variant: BadgeVariant; readonly className: string }
 > = {
   neutral: { variant: "secondary", className: "" },
-  info: { variant: "secondary", className: "bg-blue-100 text-blue-900" },
-  success: { variant: "secondary", className: "bg-emerald-100 text-emerald-900" },
-  warning: { variant: "outline", className: "border-amber-500 text-amber-700" },
+  info: {
+    variant: "secondary",
+    className: "bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-200",
+  },
+  success: {
+    variant: "secondary",
+    className:
+      "bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200",
+  },
+  warning: {
+    variant: "outline",
+    className:
+      "border-amber-500 text-amber-700 dark:border-amber-500/60 dark:text-amber-300",
+  },
   muted: { variant: "outline", className: "text-muted-foreground" },
 };
 
