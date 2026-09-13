@@ -27,9 +27,10 @@ export const OBJECT_STATUSES = {
 export type ObjectStatus = keyof typeof OBJECT_STATUSES;
 
 export const STAGE_STATUSES = {
-  blocked: { label: "Блокирован", tone: "warning" },
+  pending: { label: "Ожидает", tone: "neutral" },
   in_progress: { label: "В работе", tone: "info" },
-  done: { label: "Завершён", tone: "success" },
+  completed: { label: "Завершён", tone: "success" },
+  blocked: { label: "Блокирован", tone: "warning" },
 } as const satisfies Record<string, StatusEntry>;
 
 export type StageStatus = keyof typeof STAGE_STATUSES;

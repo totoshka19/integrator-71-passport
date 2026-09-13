@@ -15,7 +15,7 @@ const stage = (index: number, status: Stage["status"]): Stage => ({
 const draft: StageDraft = { title: "Кровля", period };
 
 const initial = (): PassportState => ({
-  stages: [stage(1, "done"), stage(2, "in_progress")],
+  stages: [stage(1, "completed"), stage(2, "in_progress")],
   estimate: [],
 });
 
@@ -29,13 +29,13 @@ describe("stage/added", () => {
     expect(next.stages.at(-1)?.title).toBe("Кровля");
   });
 
-  it("создаёт новый этап блокированным", () => {
+  it("создаёт новый этап ожидающим", () => {
     const next = passportReducer(initial(), {
       type: "stage/added",
       id: "stage_new",
       draft,
     });
-    expect(next.stages.at(-1)?.status).toBe("blocked");
+    expect(next.stages.at(-1)?.status).toBe("pending");
   });
 
   it("не изменяет переданное состояние", () => {
@@ -60,9 +60,9 @@ describe("stage/transitioned", () => {
     const next = passportReducer(initial(), {
       type: "stage/transitioned",
       id: "stage_2",
-      action: "complete",
+      status: "completed",
     });
-    expect(next.stages[1]?.status).toBe("done");
+    expect(next.stages[1]?.status).toBe("completed");
   });
 
   it("возвращает то же состояние, когда переход запрещён", () => {
@@ -70,7 +70,7 @@ describe("stage/transitioned", () => {
     const next = passportReducer(state, {
       type: "stage/transitioned",
       id: "stage_1",
-      action: "reopen",
+      status: "blocked",
     });
     expect(next).toBe(state);
   });
@@ -81,7 +81,7 @@ describe("stage/transitioned", () => {
       passportReducer(state, {
         type: "stage/transitioned",
         id: "stage_404",
-        action: "start",
+        status: "in_progress",
       }),
     ).toBe(state);
   });
