@@ -4,7 +4,7 @@ import { useReducer, useState, type ReactNode } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { assertNever } from "@/lib/assert-never";
 import { passportReducer, type PassportState } from "../model/passport-reducer";
-import type { StageAction } from "../model/stage-flow";
+import type { StageStatus } from "../model/dictionaries";
 import { DEFAULT_TAB_ID, PASSPORT_TABS, isTabId, type TabId } from "../model/tabs";
 import type { EstimateItemDraft, StageDraft, StageId } from "../model/types";
 import { EstimateTab } from "./estimate-tab";
@@ -27,8 +27,8 @@ export function PassportWorkspace({ initial, mainTab }: PassportWorkspaceProps) 
     dispatch({ type: "estimate/added", id: `item_${crypto.randomUUID()}`, draft });
   };
 
-  const transitionStage = (id: StageId, action: StageAction): void => {
-    dispatch({ type: "stage/transitioned", id, action });
+  const transitionStage = (id: StageId, status: StageStatus): void => {
+    dispatch({ type: "stage/transitioned", id, status });
   };
 
   const renderPanel = (tab: TabId): ReactNode => {

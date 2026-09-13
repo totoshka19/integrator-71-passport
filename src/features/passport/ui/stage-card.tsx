@@ -2,23 +2,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDate } from "@/lib/format";
 import { STAGE_STATUSES } from "../model/dictionaries";
-import {
-  STAGE_ACTION_LABELS,
-  describeDenial,
-  type StageAction,
-  type StageView,
-} from "../model/stage-flow";
+import type { StageView } from "../model/stage-flow";
 import type { StageId } from "../model/types";
 import { StatusBadge } from "./status-badge";
 
 interface StageCardProps {
   readonly view: StageView;
-  readonly showDenial: boolean;
-  readonly onTransition: (id: StageId, action: StageAction) => void;
+  readonly onChangeStatus: (id: StageId) => void;
 }
 
-export function StageCard({ view, showDenial, onTransition }: StageCardProps) {
-  const { stage, position, action, check } = view;
+export function StageCard({ view, onChangeStatus }: StageCardProps) {
+  const { stage, position } = view;
   const status = STAGE_STATUSES[stage.status];
 
   return (
@@ -33,14 +27,6 @@ export function StageCard({ view, showDenial, onTransition }: StageCardProps) {
             <p className="mt-1 text-sm tabular-nums text-muted-foreground">
               {formatDate(stage.period.start)} - {formatDate(stage.period.end)}
             </p>
-            {showDenial && !check.ok && (
-              <p
-                role="status"
-                className="mt-2 text-sm text-amber-700 dark:text-amber-400"
-              >
-                {describeDenial(check.denial)}
-              </p>
-            )}
           </div>
         </div>
 
@@ -50,9 +36,9 @@ export function StageCard({ view, showDenial, onTransition }: StageCardProps) {
             variant="outline"
             size="sm"
             className="w-full sm:w-auto"
-            onClick={() => onTransition(stage.id, action)}
+            onClick={() => onChangeStatus(stage.id)}
           >
-            {STAGE_ACTION_LABELS[action]}
+            Изменить статус
           </Button>
         </div>
       </CardContent>

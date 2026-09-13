@@ -33,9 +33,9 @@ describe("демонстрационный объект", () => {
     expect(demo?.stages).toHaveLength(13);
   });
 
-  it("показывает все три статуса сразу", () => {
+  it("показывает статусы цикла", () => {
     expect(new Set(statuses())).toEqual(
-      new Set(["done", "in_progress", "blocked"]),
+      new Set(["completed", "in_progress", "pending"]),
     );
   });
 
@@ -45,9 +45,9 @@ describe("демонстрационный объект", () => {
 
   it("не содержит завершённых этапов после незавершённого", () => {
     const all = statuses();
-    const firstUnfinished = all.findIndex((status) => status !== "done");
+    const firstUnfinished = all.findIndex((status) => status !== "completed");
     const tail = firstUnfinished === -1 ? [] : all.slice(firstUnfinished);
-    expect(tail).not.toContain("done");
+    expect(tail).not.toContain("completed");
   });
 
   it("не содержит этапов с пустым названием", () => {

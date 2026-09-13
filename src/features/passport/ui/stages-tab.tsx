@@ -1,29 +1,30 @@
 import { useState } from "react";
-import { buildStageViews, type StageAction } from "../model/stage-flow";
+import { buildStageViews } from "../model/stage-flow";
+import type { StageStatus } from "../model/dictionaries";
+import { STAGE_STATUSES } from "../model/dictionaries";
 import type { Stage, StageDraft, StageId } from "../model/types";
 import { AddStageDialog } from "./add-stage-dialog";
 import { EmptyState } from "./empty-state";
 import { StageCard } from "./stage-card";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface StagesTabProps {
   readonly stages: readonly Stage[];
   readonly onAdd: (draft: StageDraft) => void;
-  readonly onTransition: (id: StageId, action: StageAction) => void;
+  readonly onTransition: (id: StageId, status: StageStatus) => void;
 }
 
 export function StagesTab({ stages, onAdd, onTransition }: StagesTabProps) {
-  const [deniedStageId, setDeniedStageId] = useState<StageId | null>(null);
+  const [selectedStageId, setSelectedStageId] = useState<StageId | null>(null);
   const views = buildStageViews(stages);
-
-  const handleTransition = (id: StageId, action: StageAction): void => {
-    const view = views.find((item) => item.stage.id === id);
-    if (view !== undefined && !view.check.ok) {
-      setDeniedStageId(id);
-      return;
-    }
-    setDeniedStageId(null);
-    onTransition(id, action);
-  };
+  const selectedView = views.find((view) => view.stage.id === selectedStageId);
 
   return (
     <div className="grid gap-4">
@@ -48,13 +49,45 @@ export function StagesTab({ stages, onAdd, onTransition }: StagesTabProps) {
             <li key={view.stage.id}>
               <StageCard
                 view={view}
-                showDenial={deniedStageId === view.stage.id}
-                onTransition={handleTransition}
+                onChangeStatus={setSelectedStageId}
               />
             </li>
           ))}
         </ol>
       )}
+
+      <Dialog
+        open={selectedView !== undefined}
+        onOpenChange={(open) => {
+          if (!open) setSelectedStageId(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Изменить статус</DialogTitle>
+            <DialogDescription>
+              {selectedView?.stage.title}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-2">
+            {selectedView?.transitions.map((status) => (
+              <Button
+                key={status}
+                variant="outline"
+                className="justify-start"
+                onClick={() => {
+                  if (selectedStageId !== null) {
+                    onTransition(selectedStageId, status);
+                  }
+                  setSelectedStageId(null);
+                }}
+              >
+                {STAGE_STATUSES[status].label}
+              </Button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

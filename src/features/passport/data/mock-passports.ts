@@ -38,14 +38,14 @@ function buildTimeline(
   for (let index = 0; index < completed; index += 1) {
     const id = stages[index]?.id;
     if (id === undefined) continue;
-    stages = applyTransition(stages, id, "start");
-    stages = applyTransition(stages, id, "complete");
+    stages = applyTransition(stages, id, "in_progress");
+    stages = applyTransition(stages, id, "completed");
   }
 
   const currentId = stages[completed]?.id;
   return currentId === undefined
     ? stages
-    : applyTransition(stages, currentId, "start");
+    : applyTransition(stages, currentId, "in_progress");
 }
 
 const HOUSE_ESTIMATE: readonly EstimateItem[] = [

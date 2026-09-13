@@ -25,7 +25,7 @@ const item: EstimateItem = {
 
 const initial: PassportState = {
   stages: [
-    stage(1, "Подготовка участка", "done"),
+    stage(1, "Подготовка участка", "completed"),
     stage(2, "Земляные работы", "in_progress"),
   ],
   estimate: [item],
@@ -103,7 +103,7 @@ describe("добавление этапа", () => {
     expect(screen.getByText("Фундамент")).toBeInTheDocument();
   });
 
-  it("создаёт новый этап блокированным", async () => {
+  it("создаёт новый этап ожидающим", async () => {
     const user = userEvent.setup();
     renderWorkspace();
     const dialog = await openStageDialog(user);
@@ -114,7 +114,7 @@ describe("добавление этапа", () => {
     const added = screen.getByText("Фундамент").closest("li");
     expect(added).not.toBeNull();
     expect(
-      within(added as HTMLElement).getByText("Блокирован"),
+      within(added as HTMLElement).getByText("Ожидает"),
     ).toBeInTheDocument();
   });
 
@@ -370,7 +370,7 @@ describe("доступность", () => {
 });
 
 describe("правила и состояние", () => {
-  it("не меняет статус при запрещённом переходе", async () => {
+  it("показывает только разрешённый переход", async () => {
     const user = userEvent.setup();
     renderWorkspace();
     await openTab(user, /Этапы/);
@@ -378,14 +378,12 @@ describe("правила и состояние", () => {
     const card = screen
       .getByText("Подготовка участка")
       .closest("li") as HTMLElement;
-    await user.click(
-      within(card).getByRole("button", { name: "Вернуть в работу" }),
-    );
+    await user.click(within(card).getByRole("button", { name: "Изменить статус" }));
 
     expect(within(card).getByText("Завершён")).toBeInTheDocument();
-    expect(
-      within(card).getByText(/уже начат - вернуть предыдущий нельзя/),
-    ).toBeInTheDocument();
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).getByRole("button", { name: "В работе" })).toBeInTheDocument();
+    expect(within(dialog).queryByRole("button", { name: "Блокирован" })).toBeNull();
   });
 
   it("сохраняет изменения при переключении вкладок", async () => {
@@ -396,8 +394,11 @@ describe("правила и состояние", () => {
     const card = screen
       .getByText("Земляные работы")
       .closest("li") as HTMLElement;
+    await user.click(within(card).getByRole("button", { name: "Изменить статус" }));
     await user.click(
-      within(card).getByRole("button", { name: "Завершить этап" }),
+      within(screen.getByRole("dialog")).getByRole("button", {
+        name: "Завершён",
+      }),
     );
 
     await openTab(user, /Смета/);

@@ -1,5 +1,6 @@
 import { assertNever } from "@/lib/assert-never";
-import { applyTransition, createStage, type StageAction } from "./stage-flow";
+import { applyTransition, createStage } from "./stage-flow";
+import type { StageStatus } from "./dictionaries";
 import type {
   EstimateItem,
   EstimateItemDraft,
@@ -19,7 +20,7 @@ export type PassportAction =
   | {
       readonly type: "stage/transitioned";
       readonly id: StageId;
-      readonly action: StageAction;
+      readonly status: StageStatus;
     }
   | {
       readonly type: "estimate/added";
@@ -38,7 +39,7 @@ export function passportReducer(
         stages: [...state.stages, createStage(action.id, action.draft)],
       };
     case "stage/transitioned": {
-      const stages = applyTransition(state.stages, action.id, action.action);
+      const stages = applyTransition(state.stages, action.id, action.status);
       return stages === state.stages ? state : { ...state, stages };
     }
     case "estimate/added":
